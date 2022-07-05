@@ -1,6 +1,7 @@
 import ast
 import os
 import requests
+import pandas as pd
 
 import spotipy
 
@@ -146,3 +147,17 @@ class HistoryScrap:
 			except:
 				print(f'Something went wrong for {idd}')
 				return None
+
+	#Function that allows to write the data retrieved into .csv files when needed only
+
+	def save_to_file(self, data_type = 'features', relative_path = '/output/'):
+
+		if data_type == 'tracks':
+			path = CWD + relative_path + 'tracks.csv'
+			data = pd.DataFrame(self.ids)
+			data.to_csv(path_or_buf=path, header=['track_id'], index=False)
+		else:
+			path = CWD + relative_path + 'features.csv'
+			data = pd.DataFrame(self.history_features)
+			features_header = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo']
+			data.to_csv(path_or_buf=path, header=features_header, index=False)
